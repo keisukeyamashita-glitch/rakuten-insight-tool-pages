@@ -4,46 +4,258 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>楽天インサイト ツール紹介</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif; line-height: 1.7; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
-    h1 { font-size: 1.25rem; font-weight: 600; border-bottom: 1px solid #ccc; padding-bottom: 0.5rem; }
-    h2 { font-size: 1.05rem; margin-top: 1.75rem; color: #111; }
-    p { margin: 0.6rem 0; }
-    ul { margin: 0.5rem 0; padding-left: 1.25rem; }
-    li { margin: 0.35rem 0; }
-    a { color: #0645ad; text-decoration: underline; }
+    /* コーポレート: R=0, G=40, B=150 */
+    :root {
+      --corp: rgb(0, 40, 150);
+      --corp-mid: rgb(25, 75, 185);
+      --corp-bright: rgb(45, 110, 220);
+      --corp-soft: rgba(0, 40, 150, 0.08);
+      --corp-border: rgba(0, 40, 150, 0.14);
+      --ink: #0f1f45;
+      --muted: #3d4d73;
+      --card: rgba(255, 255, 255, 0.94);
+      --shadow: 0 12px 40px rgba(0, 40, 150, 0.1);
+      --shadow-hover: 0 16px 48px rgba(0, 40, 150, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "M PLUS Rounded 1c", "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
+      line-height: 1.75;
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 120% 80% at 0% -20%, rgba(0, 40, 150, 0.14), transparent 52%),
+        radial-gradient(ellipse 100% 60% at 100% 0%, rgba(45, 110, 220, 0.12), transparent 48%),
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(0, 40, 150, 0.08), transparent 50%),
+        linear-gradient(165deg, #f5f8ff 0%, #eef3fc 38%, #fafcff 100%);
+      background-attachment: fixed;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .wrap {
+      max-width: 40rem;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 1.75rem 1.25rem 1.5rem;
+      background: var(--card);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 40, 150, 0.07), rgba(45, 110, 220, 0.06));
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--corp);
+      background: linear-gradient(135deg, #e8eefc, #f0f4ff);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: clamp(1rem, 3.5vw, 1.2rem);
+      font-weight: 800;
+      line-height: 1.55;
+      margin: 0;
+      position: relative;
+      background: linear-gradient(120deg, var(--ink) 0%, var(--corp-mid) 50%, var(--ink) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @supports not (-webkit-background-clip: text) {
+      .hero h1 { color: var(--ink); -webkit-text-fill-color: unset; }
+    }
+
+    .section {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 1.25rem 1.35rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .section:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    .section h2 {
+      font-size: 1.02rem;
+      font-weight: 800;
+      margin: 0 0 0.75rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--corp), var(--corp-mid), var(--corp-bright)) 1;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .section h2 .emoji {
+      font-style: normal;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+    }
+
+    .section.new h2 {
+      border-image: linear-gradient(90deg, var(--corp-bright), rgb(70, 140, 235)) 1;
+    }
+
+    .section p {
+      margin: 0.55rem 0;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .section p:first-of-type { margin-top: 0; }
+
+    .link-list {
+      list-style: none;
+      margin: 0.75rem 0 0;
+      padding: 0;
+    }
+
+    .link-list li {
+      margin: 0.65rem 0;
+      padding: 0.85rem 1rem;
+      background: linear-gradient(135deg, #eef3fc 0%, #e5edfa 100%);
+      border-radius: 14px;
+      border: 1px solid var(--corp-border);
+    }
+
+    .link-list a {
+      display: inline-block;
+      margin-top: 0.35rem;
+      color: var(--corp);
+      font-weight: 700;
+      text-decoration: none;
+      word-break: break-all;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 40, 150, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+    }
+
+    .link-list a:hover {
+      color: var(--corp-mid);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 40, 150, 0.18);
+    }
+
+    .notice {
+      background: linear-gradient(135deg, #fffbf5 0%, #fff4e5 100%);
+      border: 1px solid rgba(180, 120, 40, 0.22);
+    }
+
+    .notice h2 {
+      border-image: linear-gradient(90deg, rgb(0, 40, 150), #b8860b) 1;
+    }
+
+    .contact {
+      background: linear-gradient(135deg, #eef3fc 0%, #e0e9fa 100%);
+      border: 1px solid var(--corp-border);
+    }
+
+    .contact h2 {
+      border-image: linear-gradient(90deg, var(--corp), var(--corp-bright)) 1;
+    }
+
+    .contact a[href^="mailto"] {
+      display: inline-block;
+      margin-top: 0.35rem;
+      color: var(--corp);
+      font-weight: 800;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 4px 14px rgba(0, 40, 150, 0.14);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+    }
+
+    .contact a[href^="mailto"]:hover {
+      color: var(--corp-mid);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0, 40, 150, 0.22);
+    }
   </style>
 </head>
 <body>
 
-  <h1>～楽天インサイトでは、お客様のマーケティング活動を強力にサポートするツールをご提供しています～</h1>
+  <div class="wrap">
+    <header class="hero">
+      <span class="hero-badge">Rakuten Insight Tools</span>
+      <h1>～楽天インサイトでは、お客様のマーケティング活動を強力にサポートするツールをご提供しています～</h1>
+    </header>
 
-  <h2>■■楽クロス for Web■■</h2>
-  <p>インストール不要で、いつでも自由にクロス集計やレポート出力ができる集計ソフトです。</p>
-  <p>取得したアンケートデータを柔軟に分析したい方に最適です。</p>
+    <section class="section">
+      <h2><span class="emoji" aria-hidden="true">📊</span>■■楽クロス for Web■■</h2>
+      <p>インストール不要で、いつでも自由にクロス集計やレポート出力ができる集計ソフトです。</p>
+      <p>取得したアンケートデータを柔軟に分析したい方に最適です。</p>
+    </section>
 
-  <h2>■■楽楽プロファイル■■</h2>
-  <p>楽楽プロファイルは、今回のアンケート回答データと楽天インサイトが保有するABD（アスキングビッグデータ）を連携させることができるシステムです。</p>
-  <p>これにより、アンケート結果に大規模な価値観データを組み合わせ、ターゲットプロファイルを自動生成できます。</p>
+    <section class="section">
+      <h2><span class="emoji" aria-hidden="true">👤</span>■■楽楽プロファイル■■</h2>
+      <p>楽楽プロファイルは、今回のアンケート回答データと楽天インサイトが保有するABD（アスキングビッグデータ）を連携させることができるシステムです。</p>
+      <p>これにより、アンケート結果に大規模な価値観データを組み合わせ、ターゲットプロファイルを自動生成できます。</p>
+    </section>
 
-  <h2>【新機能】楽楽プロファイルに「インタビュー機能」が新たに搭載！</h2>
-  <p>今回、楽楽プロファイルに「インタビュー機能」が新たに搭載されました。</p>
-  <p>AIがプロファイルを擬人化し、対話を通じてターゲットの深掘りからアイデア創出まで強力にサポートします。</p>
-  <p>「ターゲットのインサイトが掴みきれない」「顧客理解を深めたいが時間がない」「斬新な企画アイデアが欲しい」といったお悩みをお持ちのマーケティング担当者様にこそ、ぜひお試しいただきたい機能です。</p>
+    <section class="section new">
+      <h2><span class="emoji" aria-hidden="true">✨</span>【新機能】楽楽プロファイルに「インタビュー機能」が新たに搭載！</h2>
+      <p>今回、楽楽プロファイルに「インタビュー機能」が新たに搭載されました。</p>
+      <p>AIがプロファイルを擬人化し、対話を通じてターゲットの深掘りからアイデア創出まで強力にサポートします。</p>
+      <p>「ターゲットのインサイトが掴みきれない」「顧客理解を深めたいが時間がない」「斬新な企画アイデアが欲しい」といったお悩みをお持ちのマーケティング担当者様にこそ、ぜひお試しいただきたい機能です。</p>
+    </section>
 
-  <h2>【楽楽プロファイルご紹介動画】</h2>
-  <ul>
-    <li>楽楽プロファイルとは<br><a href="https://bit.ly/41qmkIa">https://bit.ly/41qmkIa</a></li>
-    <li>インタビュー機能について<br><a href="https://bit.ly/4s1yz9e">https://bit.ly/4s1yz9e</a></li>
-    <li>使用方法説明動画<br><a href="https://bit.ly/3PHbydX">https://bit.ly/3PHbydX</a></li>
-  </ul>
+    <section class="section">
+      <h2><span class="emoji" aria-hidden="true">🎬</span>【楽楽プロファイルご紹介動画】</h2>
+      <ul class="link-list">
+        <li>楽楽プロファイルとは<br><a href="https://bit.ly/41qmkIa">https://bit.ly/41qmkIa</a></li>
+        <li>インタビュー機能について<br><a href="https://bit.ly/4s1yz9e">https://bit.ly/4s1yz9e</a></li>
+        <li>使用方法説明動画<br><a href="https://bit.ly/3PHbydX">https://bit.ly/3PHbydX</a></li>
+      </ul>
+    </section>
 
-  <h2>【注意点】</h2>
-  <p>楽天インサイトモニターを利用したインターネット定量調査に上記サービスがご利用いただけます。一部の調査サービスではご利用いただけないことをご了承ください。</p>
+    <section class="section notice">
+      <h2><span class="emoji" aria-hidden="true">⚠️</span>【注意点】</h2>
+      <p>楽天インサイトモニターを利用したインターネット定量調査に上記サービスがご利用いただけます。一部の調査サービスではご利用いただけないことをご了承ください。</p>
+    </section>
 
-  <h2>【お問い合わせ】</h2>
-  <p>ツールに関するご不明点、または詳細説明をご希望の方（レクチャー会もございます）は、お気軽にお問い合わせください。</p>
-  <p><a href="mailto:cmc-ri-rsg-rps@mail.rakuten.com">cmc-ri-rsg-rps@mail.rakuten.com</a></p>
+    <section class="section contact">
+      <h2><span class="emoji" aria-hidden="true">✉️</span>【お問い合わせ】</h2>
+      <p>ツールに関するご不明点、または詳細説明をご希望の方（レクチャー会もございます）は、お気軽にお問い合わせください。</p>
+      <p><a href="mailto:cmc-ri-rsg-rps@mail.rakuten.com">cmc-ri-rsg-rps@mail.rakuten.com</a></p>
+    </section>
+  </div>
 
 </body>
 </html>
